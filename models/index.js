@@ -1,8 +1,6 @@
-
-
 const User = require('./User');
 const Post = require('./Post');
-const Comment = require('./Comment');
+const Comment = require('./comment');
 
 // this is if a user has many post then create foreign key and user post can be deleted 
 User.hasMany(Post, {
