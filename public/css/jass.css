@@ -1,17 +1,11 @@
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-/* Styling for Sign Up Form */
-.signupForm {
+/* Styling for Sign In Form */
+.signinform {
     padding: 20px;
     border-radius: 8px;
-    display:flex;
+    display: flex;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    height:100vh;
-    justify-content:center;
+    height: 100vh;
+    justify-content: center;
     align-items: center;
 }
 
@@ -69,7 +63,7 @@
     font-weight: 600;
     z-index: 10;
     left: 3px;
-    color:#34495e;
+    color: #34495e;
 }
 
 ::placeholder {
@@ -88,6 +82,7 @@
     font-size: 16px;
     margin-top: 30px;
 }
+
 .submitBtn:hover {
     background-color: lightblue;
     transform: translateY(-2px);
