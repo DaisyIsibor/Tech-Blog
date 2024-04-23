@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const { Post, User } = require('../models');
+const { Post, User, Comment } = require('../models');
+// const withAuth = require('../utils/auth')
 
 // GET all posts
 router.get('/', async (req, res) => {
@@ -15,6 +16,20 @@ router.get('/', async (req, res) => {
     } catch (err) {
         console.error('Error:', err);
         res.status(500).json({ error: 'Failed to retrieve posts' });
+    }
+});
+
+// Using the POST method to create a new comment
+router.post('/', withAuth, async (req, res) => {
+    // const body = req.body;
+    try {
+        const newComment = await Comment.create({
+            ...req.body,
+            user_id: req.session.user_id,
+        });
+        res.status(200).json({ newComment, success: true });
+    } catch (err) {
+        res.status(500).json(err);
     }
 });
 

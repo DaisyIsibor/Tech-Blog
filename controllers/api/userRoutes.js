@@ -1,3 +1,10 @@
+// Routes to get all user details and post. 
+const router = require('express').Router();
+const { User } = require('../../models');
+const withAuth = require('../../utils/auth')
+
+
+
 router.post('/login', async (req, res) => {
     try {
     const { email, password } = req.body;
@@ -43,3 +50,23 @@ router.post('/logout', (req, res) => {
     res.status(404).end();
     }
 });
+
+// Using the DELETE method to delete a user
+router.delete('/:id', withAuth, async (req, res) => {
+    try {
+    const dbUserData = await User.destroy({
+        where: {id: req.params.id},
+    });        
+    if (!dbUserData) {
+        res.status(404).json({
+        });
+        return;
+    }  
+    res.status(200).json({dbUserData, success: true});
+    } catch (err) {
+    res.status(500).json(err);
+    }
+});
+
+
+module.exports = router;
