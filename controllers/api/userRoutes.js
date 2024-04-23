@@ -1,8 +1,50 @@
 // Routes to get all user details and post. 
 const router = require('express').Router();
-const { User } = require('../../models');
+const { User, Post, Comment } = require('../../models');
 const withAuth = require('../../utils/auth')
 
+router.get('/', async (req, res) => {
+    try {
+    const dbUserData = await User.findAll({
+        attributes: { exclude: ['password'] },
+    });
+    res.status(200).json(dbUserData);
+    } catch (err) {
+    res.status(400).json(err);
+    }
+});
+
+router.get('/:id', async (req, res) => {
+    try {
+    const userData = await User.findOne({
+        attributes: { exclude: ['password'] },
+        where: { id: req.params.id },
+        include: [
+        {
+            model: Post,
+            attributes: ['id', 'title', 'content'],
+        },
+        {
+            model: Comment,
+            attributes: ['id', 'text'],
+            include: {
+            model: Post,
+            attributes: ['title'],
+            },
+        },
+        ],
+    });
+
+    if (!userData) {
+        return res.status(404).json({ message: `User with ID ${req.params.id} not found` });
+    }
+
+    res.status(200).json(userData);
+    } catch (error) {
+    console.error('Error:', error);
+    res.status(500).json({ error: 'Failed to fetch user data' });
+    }
+});
 
 
 router.post('/login', async (req, res) => {
@@ -25,7 +67,7 @@ router.post('/login', async (req, res) => {
 });
 
 
-
+// this is a signup route to redirect to the profile once user signs up 
 router.post('/signup', async (req, res) => {
     try {
         const dbUserData = await User.create(req.body);
