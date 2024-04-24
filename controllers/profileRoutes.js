@@ -57,8 +57,8 @@ router.put('/:userId', withAuth, async (req, res) => {
 });
 
 // GET the page for creating a new post
-router.get('/:userId/post', (req, res) => {
-    res.render('post');
+router.get('/:userId/newpost', (req, res) => {
+    res.render('newpost');
 });
 
 // POST a new post

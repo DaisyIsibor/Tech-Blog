@@ -49,8 +49,8 @@ router.get('/:id', async (req, res) => {
 
 router.post('/login', async (req, res) => {
     try {
-    const { email, password } = req.body;
-      const dbUserData = await User.findOne({ where: { email } }); // Corrected from 'name' to 'email'
+    const { username, password } = req.body;
+    const dbUserData = await User.findOne({ where: { username } }); 
     if (!dbUserData || !(await dbUserData.checkPassword(password))) {
         return res.status(400).json({ message: 'Invalid email or password' });
     }

@@ -3,21 +3,20 @@ const router = express.Router();
 const { Post, User, Comment } = require('../models');
 const withAuth = require('../utils/auth')
 
-// GET all posts
+// Retrieve all posts for the homepage
 router.get('/', async (req, res) => {
     try {
-        const posts = await Post.findAll({
-            include: [
-                { model: User, attributes: ['username', 'profile_picture'] }
-            ],
-            order: [['createdAt', 'DESC']]
+        const postData = await Post.findAll({
+            include: [{ model: User, attributes: ['username'] }] 
         });
+        const posts = postData.map(post => post.get({ plain: true }));
         res.render('homepage', { posts });
     } catch (err) {
-        console.error('Error:', err);
-        res.status(500).json({ error: 'Failed to retrieve posts' });
+        console.error(err);
+        res.status(500).json(err);
     }
 });
+
 
 // Using the POST method to create a new comment
 router.post('/', withAuth, async (req, res) => {
@@ -61,9 +60,9 @@ router.get("/login", (req, res) => {
     res.render('login');
 })
 
-router.get('/post', (req, res) => {
+router.get('/newpost', (req, res) => {
     if (req.session.logged_in) {
-        res.render('post', {
+        res.render('newpost', {
             logged_in: true,
         });
         return;

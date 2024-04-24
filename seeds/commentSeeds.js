@@ -1,7 +1,6 @@
 // Import the Comment model from '../models'
 const { Comment } = require('../models');
 
-// Define the data for the comments highlighting the difference between ORM and SQL
 const commentData = [
     {
         user_id: 1,

@@ -17,12 +17,11 @@ router.post('/', withAuth, async (req, res) => {
         res.status(500).json(err);
     }
 });
-
 // Retrieving all posts
 router.get('/', async (req, res) => {
     try {
         const postData = await Post.findAll({
-            include: [{ model: User, attributes: ['name'] }]
+            include: [{ model: User, attributes: ['username'] }] 
         });
         const posts = postData.map(post => post.get({ plain: true }));
         res.status(200).json(posts);
@@ -31,6 +30,8 @@ router.get('/', async (req, res) => {
         res.status(500).json(err);
     }
 });
+
+module.exports = router;
 
 // Editing a post
 router.put('/:id', withAuth, async (req, res) => {

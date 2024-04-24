@@ -24,11 +24,9 @@
 
     <!-- Render each post using the post partial -->
     <ul class="post-list">
-        {{#each posts as |post|}}
-            <li>
-                {{> post post}}
-            </li>
-        {{/each}}
+    {{#each posts}}
+    {{> post this}}
+{{/each}}
     </ul>
 
 </div>
