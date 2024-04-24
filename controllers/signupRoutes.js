@@ -1,12 +1,10 @@
+// signupRoutes.js
 const express = require('express');
 const router = express.Router();
 
-
-
-router.get('/signup', (req, res) => {
-    // Render the signup form
+router.get('/', (req, res) => {
+    // Render the sign-up form
     res.render('signup');
 });
 
-
-module.exports = router; 
+module.exports = router;

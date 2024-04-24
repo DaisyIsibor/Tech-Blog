@@ -52,7 +52,7 @@ router.post('/login', async (req, res) => {
     const { username, password } = req.body;
     const dbUserData = await User.findOne({ where: { username } }); 
     if (!dbUserData || !(await dbUserData.checkPassword(password))) {
-        return res.status(400).json({ message: 'Invalid email or password' });
+        return res.status(400).json({ message: 'Invalid username or password' });
     }
     req.session.save(() => {
         req.session.user_id = dbUserData.id;
@@ -65,7 +65,19 @@ router.post('/login', async (req, res) => {
     res.status(500).json({ message: 'Internal server error' });
     }
 });
-
+router.post('/', async (req, res) => {
+    try {
+        const dbUserData = await User.create(req.body);
+        req.session.save(() => {
+            req.session.user_id = dbUserData.id;
+            req.session.name = dbUserData.name;
+            req.session.logged_in = true;
+            res.redirect('/profile'); // Redirect to profile page after signup
+        });
+    } catch (err) {
+        res.status(400).json(err);
+    }
+});
 
 // this is a signup route to redirect to the profile once user signs up 
 router.post('/signup', async (req, res) => {
