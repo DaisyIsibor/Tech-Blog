@@ -92,4 +92,64 @@
     font-size: 14px;
     color: #888;
     margin-left: 10px;
+
+}
+
+.post {
+    padding-bottom: 80px; 
+    margin-bottom: 80px;
+    overflow-y: auto;
+    padding-top: 80px;
+}
+
+/* Container for the entire contact page */
+.contact-page {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* Introduction section */
+.introduction {
+    margin-bottom: 20px;
+}
+
+.introduction h2 {
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+.introduction p {
+    font-size: 16px;
+    line-height: 1.5;
+}
+
+/* Contact information section */
+.contact-info {
+    border-top: 1px solid #ccc;
+    padding-top: 20px;
+}
+
+.contact-info h3 {
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+.contact-links {
+    display: flex;
+    align-items: center;
+}
+
+.contact-links a {
+    margin-right: 10px;
+}
+
+.contact-links img {
+    width: 40px; /* Adjust size as needed */
+    height: auto;
+}
+
+/* Hover effect for contact links */
+.contact-links a:hover img {
+    opacity: 0.7;
 }

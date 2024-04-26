@@ -68,4 +68,10 @@ router.get('/newpost', (req, res) => {
         return;
     }
 })
+
+
+router.get('/contact', (req, res)=>{
+    res.render('contact');
+});
+
 module.exports = router;
