@@ -1,35 +1,23 @@
-<!-- views/homepage.handlebars -->
-
-{{!-- <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Homepage</title>
-    <link rel="stylesheet" href="/styles.css"> <!-- Link to your CSS stylesheet -->
-</head>
-<body>
-
-<!-- Navigation bar -->
-<nav>
-    <ul>
-        <li><a href="/profile">Profile</a></li> <!-- Link to the profile page -->
-        <li><a href="/login">Login</a></li> <!-- Link to the login page -->
-    </ul>
-</nav>
-
-<!-- Content area -->
-<div class="content">
-    <h1>Homepage</h1> --}}
-
-    <!-- Render each post using the post partial -->
-    <ul class="post-list">
-    {{#each posts}}
-    {{> post this}}
-{{/each}}
-    </ul>
-
+{{#each posts}}
+<div class="post">
+    <h2>{{title}} - <span class="post-info">{{user.username}} | {{formatDate createdAt}}</span></h2>
+    <p>{{content}}</p>
+    <a href="/post/{{id}}/comments">View Comments</a>
 </div>
+{{/each}}
 
-</body>
-</html>
+<script>
+// Helper function to format the date (remove time)
+Handlebars.registerHelper('formatDate', function(date) {
+    // Ensure date is a valid Date object
+    const formattedDate = new Date(date);
+    if (isNaN(formattedDate)) return ''; // Return empty string if date is invalid
+
+    // Extract and format the date (YYYY-MM-DD)
+    const year = formattedDate.getFullYear();
+    const month = String(formattedDate.getMonth() + 1).padStart(2, '0');
+    const day = String(formattedDate.getDate()).padStart(2, '0');
+    
+    return `${year}-${month}-${day}`;
+});
+</script>
