@@ -179,7 +179,7 @@
         z-index: 1000; 
     }
     header {
-        display: flex;
+        display: fixed;
         justify-content: space-between;
         align-items: center;
         padding: 10px;
