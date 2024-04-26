@@ -87,3 +87,9 @@
     background-color: lightblue;
     transform: translateY(-2px);
 }
+
+.post-info {
+    font-size: 14px;
+    color: #888;
+    margin-left: 10px;
+}

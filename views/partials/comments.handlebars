@@ -1,0 +1,29 @@
+
+<div class="comments">
+
+    <ul>
+        {{#each comments}}
+        <li>
+            {{comment}}
+
+            <!-- Option to edit/delete comment if it's owned by the user-->
+
+            {{#if userOwnsComment}}
+            <button class ="edit-comment" data-commentid="{{commentId}}" >Edit</button>
+            
+            {{/if}}
+
+            {{#if userOwnsComment}}
+            <button class="delete-comment" date-commentid="{{commentId}}">Delete</button>
+            {{/if}}
+        </li>
+        {{/each}}
+    </ul>
+
+<!-- form to add a comment-->
+    <h3>Add a Comment</h3>
+    <form id="'comment-form" action="/post/{{postId}}/comments" method="POST">
+        <textarea id="comment-text" name="commentText" placeholder="Write your comment here"></textarea>
+        <button type="submit">Add Comment</button>
+    </form>
+</div>
