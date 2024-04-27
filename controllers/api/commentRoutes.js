@@ -2,21 +2,10 @@
 
 const express = require('express');
 const router = express.Router();
-const { Comment, Post } = require('../../models');
-
-// Get all comments
-router.get('/', async (req, res) => {
-    try {
-        const comments = await Comment.findAll();
-        res.status(200).json(comments);
-    } catch (error) {
-        console.error('Error:', error);
-        res.status(500).json({ error: 'Failed to retrieve comments' });
-    }
-});
+const { Comment } = require('../../models');
 
 // Get comments for a specific post
-router.get('/posts/:postId', async (req, res) => {
+router.get('/post/:postId/comments', async (req, res) => {
     try {
         const postId = req.params.postId;
         const comments = await Comment.findAll({ where: { postId } });
@@ -28,16 +17,10 @@ router.get('/posts/:postId', async (req, res) => {
 });
 
 // Add a comment to a specific post
-router.post('/posts/:postId', async (req, res) => {
+router.post('/post/:postId/comments', async (req, res) => {
     try {
         const postId = req.params.postId;
         const { content } = req.body;
-
-        // Check if the post exists
-        const post = await Post.findByPk(postId);
-        if (!post) {
-            return res.status(404).json({ error: 'Post not found' });
-        }
 
         // Create the comment and associate it with the post
         const comment = await Comment.create({ content, postId });
@@ -48,8 +31,8 @@ router.post('/posts/:postId', async (req, res) => {
     }
 });
 
-// Edit a comment
-router.put('/:commentId', async (req, res) => {
+// Edit a comment (assuming you have a route for this)
+router.put('/comments/:commentId', async (req, res) => {
     try {
         const commentId = req.params.commentId;
         const { content } = req.body;
@@ -61,8 +44,8 @@ router.put('/:commentId', async (req, res) => {
     }
 });
 
-// Delete a comment
-router.delete('/:commentId', async (req, res) => {
+// Delete a comment (assuming you have a route for this)
+router.delete('/comments/:commentId', async (req, res) => {
     try {
         const commentId = req.params.commentId;
         await Comment.destroy({ where: { id: commentId } });
@@ -74,4 +57,3 @@ router.delete('/:commentId', async (req, res) => {
 });
 
 module.exports = router;
-

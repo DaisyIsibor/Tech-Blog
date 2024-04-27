@@ -75,7 +75,7 @@
     margin-left: auto;
     padding: 15px 30px;
     border: none;
-    background-color: #34495e;
+    background-color:mediumseagreen;
     color: white;
     border-radius: 6px;
     cursor: pointer;
@@ -84,22 +84,42 @@
 }
 
 .submitBtn:hover {
-    background-color: lightblue;
+    background-color: darkseagreen;
     transform: translateY(-2px);
 }
 
 .post-info {
-    font-size: 14px;
-    color: #888;
-    margin-left: 10px;
+    font-size: 20px;
+    color: #3e2723;
+    margin-left: 20px;
+
+    
+
+}
+/* stylink for each post and how it's displayed*/
+
+.post {
+    padding-bottom: 20px; 
+    margin-bottom: 20px;
+    overflow-y: auto;
+    padding-top: 90px;
+    margin-right:20px;
 
 }
 
-.post {
-    padding-bottom: 80px; 
-    margin-bottom: 80px;
-    overflow-y: auto;
-    padding-top: 80px;
+.post h2 {
+    color:#3e2723; /* color of the title */
+    border: 2px seagreen;
+    background-color: seagreen;
+    padding:10px;
+    font-size: 30px;
+}
+
+/* Styling for the post content */
+.post p {
+    border: 4px solid seagreen; /* border around the content */
+    padding: 20px; /* padding inside the border */
+    font-size: 18px;
 }
 
 /* Container for the entire contact page */
@@ -152,4 +172,65 @@
 /* Hover effect for contact links */
 .contact-links a:hover img {
     opacity: 0.7;
+}
+
+/* Styling for the h2 tag */
+#profile-info h2 {
+    font-size: 25px; 
+}
+
+/* Styling for the profile-info section */
+#profile-info {
+    padding: 80px; 
+}
+
+
+/* Styling for the write-form section */
+#write-form {
+    padding: 20px; 
+    background-color: blanchedalmond;
+    margin-top:50px; 
+
+    
+}
+
+/* Styling for the form elements */
+#write-form form {
+    max-width: 800px; 
+    margin: 0 auto; 
+}
+
+#write-form h2 {
+    font-size: 24px; 
+    margin-bottom: 20px; 
+}
+
+#write-form label {
+    font-weight: bold; /* Make labels bold */
+}
+
+#write-form input[type="text"],
+#write-form textarea {
+    width: 100%; 
+    padding: 10px; 
+    margin-bottom: 15px; 
+    border: 1px solid #ccc; 
+    border-radius: 5px; 
+}
+
+#write-form textarea {
+    resize: vertical; 
+}
+
+#write-form button[type="submit"] {
+    background-color:mediumseagreen;
+    color: white;
+    padding: 10px 20px; 
+    border: none; 
+    border-radius: 5px; 
+    cursor: pointer; 
+}
+
+#write-form button[type="submit"]:hover {
+    background-color:darkseagreen;
 }
