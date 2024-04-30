@@ -3,55 +3,81 @@
 const express = require('express');
 const router = express.Router();
 const { Comment } = require('../../models');
+const withAuth = require('../../utils/auth')
 
-// Get comments for a specific post
-router.get('/post/:postId/comments', async (req, res) => {
+// Get all comments
+router.get('/', async (req, res) => {
+    try {
+        const comments = await Comment.findAll();
+        if (!comments || comments.length === 0) {
+            return res.status(404).json({ message: 'No comments found' });
+        }
+        res.status(200).json(comments);
+    } catch (err) {
+        console.error('Error retrieving comments:', err);
+        res.status(500).json({ error: 'Failed to retrieve comments' });
+    }
+});
+
+// Get comments by post ID
+router.get('/:postId', async (req, res) => {
     try {
         const postId = req.params.postId;
         const comments = await Comment.findAll({ where: { postId } });
+
+        if (comments.length === 0) {
+            return res.status(404).json({ message: `No comments found for post with ID ${postId}` });
+        }
+
         res.status(200).json(comments);
     } catch (error) {
-        console.error('Error:', error);
+        console.error('Error fetching comments:', error);
         res.status(500).json({ error: 'Failed to retrieve comments for the post' });
     }
 });
 
-// Add a comment to a specific post
-router.post('/post/:postId/comments', async (req, res) => {
+// Create a new comment
+router.post('/', withAuth, async (req, res) => {
+    const { content, postId } = req.body;
     try {
-        const postId = req.params.postId;
-        const { content } = req.body;
-
-        // Create the comment and associate it with the post
-        const comment = await Comment.create({ content, postId });
-        res.status(201).json(comment);
-    } catch (error) {
-        console.error('Error:', error);
-        res.status(500).json({ error: 'Failed to add comment to the post' });
+        const newComment = await Comment.create({ content, postId, userId: req.session.userId });
+        res.status(201).json({ newComment,success: true  });
+    } catch (err) {
+        console.error('Error creating comment:', err);
+        res.status(500).json({ error: 'Failed to create comment' });
     }
 });
 
-// Edit a comment (assuming you have a route for this)
-router.put('/comments/:commentId', async (req, res) => {
+// Edit a comment by ID
+router.put('/:id', withAuth, async (req, res) => {
+    const commentId = req.params.id;
+    const { content } = req.body;
     try {
-        const commentId = req.params.commentId;
-        const { content } = req.body;
-        await Comment.update({ content }, { where: { id: commentId } });
-        res.status(200).json({ message: 'Comment updated successfully' });
-    } catch (error) {
-        console.error('Error:', error);
+        const comment = await Comment.findByPk(commentId);
+        if (!comment) {
+            return res.status(404).json({ message: `Comment with ID ${commentId} not found` });
+        }
+        // Update the comment content
+        comment.content = content;
+        await comment.save();
+        res.status(200).json({ message: 'Comment updated successfully', comment });
+    } catch (err) {
+        console.error(`Error updating comment with ID ${commentId}:`, err);
         res.status(500).json({ error: 'Failed to update comment' });
     }
 });
 
-// Delete a comment (assuming you have a route for this)
-router.delete('/comments/:commentId', async (req, res) => {
+// Delete a comment by ID
+router.delete('/:id', withAuth, async (req, res) => {
+    const commentId = req.params.id;
     try {
-        const commentId = req.params.commentId;
-        await Comment.destroy({ where: { id: commentId } });
+        const deletedComment = await Comment.destroy({ where: { id: commentId } });
+        if (!deletedComment) {
+            return res.status(404).json({ message: `Comment with ID ${commentId} not found` });
+        }
         res.status(200).json({ message: 'Comment deleted successfully' });
-    } catch (error) {
-        console.error('Error:', error);
+    } catch (err) {
+        console.error(`Error deleting comment with ID ${commentId}:`, err);
         res.status(500).json({ error: 'Failed to delete comment' });
     }
 });

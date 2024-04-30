@@ -13,6 +13,13 @@ User.hasMany(Comment, {
     onDelete: 'CASCADE'
 });
 
+//This is if a post has many post then a foreign key is created and can be deleted 
+Post.hasMany(Comment, {
+    foreignKey: 'post_id',
+    onDelete: 'CASCADE'
+});
+
+
 // this is if a post belongs to a user then a foreign keys is created and user's post can be deleted as well 
 Post.belongsTo(User, {
     foreignKey: 'user_id',
@@ -26,11 +33,6 @@ Comment.belongsTo(Post, {
 });
 
 
-//This is if a post has many post then a foreign key is created and can be deleted 
-Post.hasMany(Comment, {
-    foreignKey: 'post_id',
-    onDelete: 'CASCADE'
-});
 
 
 module.exports = { User, Post, Comment };

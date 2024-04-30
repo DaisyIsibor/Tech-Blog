@@ -1,11 +1,19 @@
 <!-- views/post.handlebars -->
 
-<div class="post">
+{{!-- <div class="post">
     <h2>{{post.title}}</h2>
     <p>{{post.content}}</p>
     <p>Posted by: {{post.username}}</p>
     <p>Published on: {{ formatDate.date }}</p>
     <!-- Link to view comments for this post -->
     <a href="/post/{{id}}/comments">View Comments</a>
-</div>
+</div> --}}
 
+<div class="post">
+    <h2>{{ post.title }}</h2>
+    <p>{{ post.content }}</p>
+    <p>Posted by: {{ post.username }}</p>
+    <p>Published on: {{ formatDate.date }}</p>
+    <!-- Link to view comments for this post -->
+    <a href="/comments">View Comments</a>
+</div>

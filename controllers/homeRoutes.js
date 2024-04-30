@@ -6,29 +6,60 @@ const withAuth = require('../utils/auth')
 // Retrieve all posts for the homepage
 router.get('/', async (req, res) => {
     try {
+        // Get all projects and JOIN with user data
         const postData = await Post.findAll({
             include: [{ model: User, attributes: ['username'] }] 
         });
-        const posts = postData.map(post => post.get({ plain: true }));
-        res.render('homepage', { posts });
+
+        // Serialize data so the template can read it
+        const posts = postData.map((post) => post.get({ plain: true }));
+        res.render('homepage', { posts,  
+        logged_in: req.session.logged_in  });
     } catch (err) {
         console.error(err);
         res.status(500).json(err);
     }
 });
 
+// Redirect to comments page for a specific post
+router.get('/post/:postId/comments', async (req, res) => {
+    const postId = req.params.postId;
+    try {
+        const comments = await Comment.findAll({ where: { postId } });
+        res.render('partials/comments', { comments }); // Adjust the path to match your file structure
+    } catch (error) {
+        console.error('Error fetching comments:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+})
 
 // Using the POST method to create a new comment
-router.post('/', withAuth, async (req, res) => {
-    // const body = req.body;
+// router.post('/', withAuth, async (req, res) => {
+//     // const body = req.body;
+//     try {
+//         const newComment = await Comment.create({
+//             ...req.body,
+//             user_id: req.session.user_id,
+//         });
+//         res.status(200).json({ newComment, success: true });
+//     } catch (err) {
+//         res.status(500).json(err);
+//     }
+// });
+
+router.get('/post/:id', async (req, res) => {
     try {
-        const newComment = await Comment.create({
-            ...req.body,
-            user_id: req.session.user_id,
+        const postId = req.params.id;
+        // Retrieve post data with associated comments
+        const postData = await Post.findOne({
+            where: { id: postId },
+            include: [{ model: Comment, include: User }],
         });
-        res.status(200).json({ newComment, success: true });
+        // Render the single-post view with post and comments
+        res.render('single-post', { post: postData, loggedIn: req.session.logged_in });
     } catch (err) {
-        res.status(500).json(err);
+        console.error(err);
+        res.status(500).json({ error: 'Internal server error' });
     }
 });
 
