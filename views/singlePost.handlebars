@@ -1,0 +1,14 @@
+<!-- singlepost.handlebars -->
+
+<div class="single-post">
+    <h2>{{ post.title }}</h2>
+    <p>{{ post.content }}</p>
+    <p>Posted by: {{ post.username }}</p>
+    <p>Published on: {{ formatDate.date }}</p>
+
+    <!-- Edit and Delete Buttons -->
+    <div class="post-actions">
+        <button id="edit-post-btn" data-postid="{{ post.id }}">Edit Post</button>
+        <button id="delete-post-btn" data-postid="{{ post.id }}">Delete Post</button>
+    </div>
+</div>

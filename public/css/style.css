@@ -116,21 +116,21 @@
     background-color: seagreen;
 }
 
-.menu-item{
+
+.menu-item {
     display:flex;
-    align-items:center;
-    margin-bottom:10px;
-    transition:background-color 0.3s ease;
-    color: black
+    align-items: center;
+    margin-bottom: 20px;
+    transition: background-color 0.3s ease;
+    color: black;
 }
 
-.menu-item-icon{
-    margin-right:10px;
-    font-size:20px;
+.menu-item-icon {
+    font-size: 20px;
+    margin-right: 5px; 
 }
-
 .menu-item:hover{
-    background-color: #34495e;
+    background-color:darkseagreen;
     }
 
     .show {
@@ -149,14 +149,16 @@
     }
     
     #menu a {
-        display: block;
+        flex: 1; 
+        display: flex;
         padding: 10px; 
         text-decoration: none;
         color:black;
+        align-items: center;
     }
-    
+
     #menu a:hover {
-        background-color: #34495e; 
+        background-color: darkseagreen; 
     }
     
     #logout {
@@ -165,7 +167,11 @@
         border: none;
         cursor: pointer;
         outline: none;
+        padding: 10px; 
+        margin-right: 20px;
     }
+
+
     
     .footer{
         position:fixed;
