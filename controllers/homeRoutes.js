@@ -25,8 +25,9 @@ router.get('/', async (req, res) => {
 router.get('/post/:postId/comments', async (req, res) => {
     const postId = req.params.postId;
     try {
-        const comments = await Comment.findAll({ where: { postId } });
-        res.render('partials/comments', { comments }); // Adjust the path to match your file structure
+        const comments = await Comment.findOne({ where: { postId } });
+        console.log({comments})
+        res.render('partials/comments', { comments }); 
     } catch (error) {
         console.error('Error fetching comments:', error);
         res.status(500).json({ error: 'Internal server error' });

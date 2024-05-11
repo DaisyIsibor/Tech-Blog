@@ -174,7 +174,7 @@
 
     
     .footer{
-        position:fixed;
+        position:static;
         bottom:0;
         left:0;
         width:100%;
@@ -189,14 +189,16 @@
         justify-content: space-between;
         align-items: center;
         padding: 10px;
-        position: fixed; 
-        background-color: seagreen;
+        position: absolute; 
+        /* background-color: seagreen; */
         top: 0;
         left: 0;
         width: 100%;
         z-index: 1000;
         
     }
+
+
     #login{
         color: pink;
         border: 60px solid black;

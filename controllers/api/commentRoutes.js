@@ -6,16 +6,25 @@ const { Comment } = require('../../models');
 const withAuth = require('../../utils/auth')
 
 // Get all comments
-router.get('/', async (req, res) => {
-    try {
+// router.get('/', async (req, res) => {
+//     try {
+//         const comments = await Comment.findAll();
+//         if (!comments || comments.length === 0) {
+//             return res.status(404).json({ message: 'No comments found' });
+//         }
+//         res.status(200).json(comments);
+//     } catch (err) {
+//         console.error('Error retrieving comments:', err);
+//         res.status(500).json({ error: 'Failed to retrieve comments' });
+//     }
+// });
+
+router.get('/comments', async (req, res)=>{
+    try{
         const comments = await Comment.findAll();
-        if (!comments || comments.length === 0) {
-            return res.status(404).json({ message: 'No comments found' });
-        }
-        res.status(200).json(comments);
-    } catch (err) {
-        console.error('Error retrieving comments:', err);
-        res.status(500).json({ error: 'Failed to retrieve comments' });
+        res.json(comments);
+    }catch (error) {
+        res.status(500).json({error:'Unable to fetch commnent'});
     }
 });
 
@@ -28,7 +37,7 @@ router.get('/:postId', async (req, res) => {
         if (comments.length === 0) {
             return res.status(404).json({ message: `No comments found for post with ID ${postId}` });
         }
-
+         console.log(comments)
         res.status(200).json(comments);
     } catch (error) {
         console.error('Error fetching comments:', error);
@@ -37,16 +46,28 @@ router.get('/:postId', async (req, res) => {
 });
 
 // Create a new comment
-router.post('/', withAuth, async (req, res) => {
-    const { content, postId } = req.body;
-    try {
-        const newComment = await Comment.create({ content, postId, userId: req.session.userId });
-        res.status(201).json({ newComment,success: true  });
-    } catch (err) {
-        console.error('Error creating comment:', err);
-        res.status(500).json({ error: 'Failed to create comment' });
+// router.post('/', withAuth, async (req, res) => {
+//     const { content, postId } = req.body;
+//     try {
+//         const newComment = await Comment.create({ content, postId, userId: req.session.userId });
+//         res.status(201).json({ newComment,success: true  });
+//     } catch (err) {
+//         console.error('Error creating comment:', err);
+//         res.status(500).json({ error: 'Failed to create comment' });
+//     }
+// });
+
+router.post('/comments', async(req,res)=>{
+    const{comment_text}=req.body;
+
+    try{
+        const newComment =await Comment.create({comment_text});
+        res.json(newComment);
+        console.log({newComment})
+    } catch(error){
+    res.status(500).json({error:'Unable to add comments'});
     }
-});
+})
 
 // Edit a comment by ID
 router.put('/:id', withAuth, async (req, res) => {

@@ -1,26 +1,24 @@
 <!-- views/comments.handlebars -->
 
-
 <div class="comments">
     <ul>
-        {{#each comments}}
+        {{#each comments as |comment|}}
         <li>
-            {{this.text}}
+            {{comment.comment_text}}
 
             <!-- Option to edit/delete comment if user owns it -->
- {{#if userOwnsComment}}
-            <button class="edit-comment" data-commentId="{{id}}">Edit</button>
+            {{#if userOwnsComment}}
             <button class="delete-comment" data-commentId="{{id}}">Delete</button>
-            {{/if}} 
+            {{/if}}
         </li>
         {{/each}}
     </ul>
 
     <!-- Form to add a new comment -->
-    <h3>Add a Comment</h3>
+
     <form id="comment-form">
         <input type="hidden" id="post-id" value="{{postId}}">
         <textarea id="comment-text" placeholder="Write your comment here"></textarea>
-        </form>
         <button type="submit">Add Comment</button>
+    </form>
 </div>

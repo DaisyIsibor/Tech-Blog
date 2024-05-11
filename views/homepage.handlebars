@@ -7,13 +7,10 @@
 {{/each}}
 
 <script>
-// Helper function to format the date (remove time)
-Handlebars.registerHelper('formatDate', function(date) {
- HEAD
     
+Handlebars.registerHelper('formatDate', function(date) {
     
 
-    // Ensure date is a valid Date object
 
     const formattedDate = new Date(date);
     if (isNaN(formattedDate)) return ''; // Return empty string if date is invalid
