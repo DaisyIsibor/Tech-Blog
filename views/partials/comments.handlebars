@@ -15,10 +15,8 @@
     </ul>
 
     <!-- Form to add a new comment -->
-
-    <form id="comment-form">
-        <input type="hidden" id="post-id" value="{{postId}}">
-        <textarea id="comment-text" placeholder="Write your comment here"></textarea>
-        <button type="submit">Add Comment</button>
-    </form>
-</div>
+<form id="comment-form" action="/post/{{postId}}/comments" method="POST">
+    <input type="hidden" id="post-id" value="{{postId}}">
+    <textarea id="comment-text" placeholder="Write your comment here"></textarea>
+    <button type="submit">Add Comment</button>
+</form>

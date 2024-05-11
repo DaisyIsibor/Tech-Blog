@@ -21,7 +21,7 @@ router.post('/', withAuth, async (req, res) => {
 //GET all posts with comments
 router.get('/post',async (req,res)=>{
     try{
-        const posts =awaitpost.findAll({ include: Comment});
+        const posts =await post.findAll({ include: Comment});
         res.render('posts', {posts});
     } catch (error) {
         res.status(500).json({error:'Unable to fetch posts'});
@@ -63,23 +63,24 @@ router.get('/post',async (req,res)=>{
 
 //POST a new comment on a post
 
-router.post('/posts/:postId/comment', async(req,res)=>{
-    console.log(req.body)
-    const postId =req.params.postId;
-    const{commentText} = req.body;
+router.post('/posts/:postId/comment', async (req, res) => {
+    console.log(req.body);
+    const postId = req.params.postId;
+    const { comment_text } = req.body; // Change commentText to comment_text
 
-    try{
+    try {
         const post = await Post.findByPk(postId);
-        if(!post){
-            return res.status(404).json({error:'Post not found'});
+        if (!post) {
+            return res.status(404).json({ error: 'Post not found' });
         }
-        const newComment=await Comment.create({comment_text:commentText});
+        const newComment = await Comment.create({ comment_text });
 
-        console.log({newComment})
-    } catch (error){
-        res.status(500).json({error:'Unable to add comment'});
+        console.log({ newComment });
+    } catch (error) {
+        res.status(500).json({ error: 'Unable to add comment' });
     }
-})
+});
+
 
 //Editing a post
 router.put('/:id', withAuth, async (req, res) => {

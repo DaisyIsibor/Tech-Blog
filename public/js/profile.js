@@ -2,7 +2,7 @@ const newFormHandler = async (event) => {
     event.preventDefault();
 
     const name = document.querySelector()
-} // need help with this 
+} 
 
 
 const delButtonHandler = async (event) => {

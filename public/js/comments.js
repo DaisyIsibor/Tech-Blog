@@ -24,11 +24,29 @@
 
 
 // Function to submit a new comment
+// function submitComment(postId, comment_text) {
+//     fetch(`/post/${postId}/comments`, {
+//         method: 'POST',
+//         headers: { 'Content-Type': 'application/json' },
+//         body: JSON.stringify({ content: comment_text })
+//     })
+//     .then(response => {
+//         if (!response.ok) {
+//             throw new Error('Failed to add comment');
+//         }
+//         // Reload the page after adding the comment to reflect the changes
+//         // location.reload();
+//     })
+//     .catch(error => {
+//         console.error('Error adding comment:', error);
+//     });
+// }
+// Function to submit a new comment
 function submitComment(postId, commentText) {
     fetch(`/post/${postId}/comments`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ content: commentText })
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams({ comment_text: commentText })
     })
     .then(response => {
         if (!response.ok) {
@@ -41,6 +59,7 @@ function submitComment(postId, commentText) {
         console.error('Error adding comment:', error);
     });
 }
+
 
 // // Function to delete a comment
 // function deleteComment(commentId) {

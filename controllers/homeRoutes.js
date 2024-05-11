@@ -22,10 +22,23 @@ router.get('/', async (req, res) => {
 });
 
 // Redirect to comments page for a specific post
+// router.get('/post/:postId/comments', async (req, res) => {
+//     const postId = req.params.postId;
+//     try {
+//         const comments = await Comment.findOne({ where: { postId } });
+//         console.log({comments})
+//         res.render('partials/comments', { comments }); 
+//     } catch (error) {
+//         console.error('Error fetching comments:', error);
+//         res.status(500).json({ error: 'Internal server error' });
+//     }
+// })
+
+// Redirect to comments page for a specific post
 router.get('/post/:postId/comments', async (req, res) => {
     const postId = req.params.postId;
     try {
-        const comments = await Comment.findOne({ where: { postId } });
+        const comments = await Comment.findAll({ where: { postId } });
         console.log({comments})
         res.render('partials/comments', { comments }); 
     } catch (error) {
@@ -33,6 +46,7 @@ router.get('/post/:postId/comments', async (req, res) => {
         res.status(500).json({ error: 'Internal server error' });
     }
 })
+
 
 // Using the POST method to create a new comment
 // router.post('/', withAuth, async (req, res) => {
@@ -64,24 +78,49 @@ router.get('/post/:id', async (req, res) => {
     }
 });
 
+// router.get('/profile', withAuth, async (req, res) => {
+//     try {
+//       // Find the logged in user based on the session ID
+//     const userData = await User.findByPk(req.session.user_id, {
+//         attributes: { exclude: ['password'] },
+//         include: [{ model: Post }],
+//     });
+
+//     const user = userData.get({ plain: true });
+
+//     res.render('profile', {
+//         ...user,
+//         logged_in: true
+//     });
+//     } catch (err) {
+//     res.status(500).json(err);
+//     }
+// });
+
 router.get('/profile', withAuth, async (req, res) => {
     try {
-      // Find the logged in user based on the session ID
-    const userData = await User.findByPk(req.session.user_id, {
-        attributes: { exclude: ['password'] },
-        include: [{ model: Post }],
-    });
+        // Find the logged-in user based on the session ID
+        const userData = await User.findByPk(req.session.user_id, {
+            attributes: { exclude: ['password'] },
+            include: [
+                { 
+                    model: Post, 
+                    include: [{ model: Comment, attributes: ['id', 'comment_text'] }] 
+                }
+            ],
+        });
 
-    const user = userData.get({ plain: true });
+        const user = userData.get({ plain: true });
 
-    res.render('profile', {
-        ...user,
-        logged_in: true
-    });
+        res.render('profile', {
+            ...user,
+            logged_in: true
+        });
     } catch (err) {
-    res.status(500).json(err);
+        res.status(500).json(err);
     }
 });
+
 
 //Login 
 router.get("/login", (req, res) => {

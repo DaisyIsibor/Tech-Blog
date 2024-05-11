@@ -24,7 +24,7 @@ router.get('/comments', async (req, res)=>{
         const comments = await Comment.findAll();
         res.json(comments);
     }catch (error) {
-        res.status(500).json({error:'Unable to fetch commnent'});
+        res.status(500).json({error:'Unable to fetch comment'});
     }
 });
 
