@@ -110,7 +110,7 @@
 .post h2 {
     color:#3e2723; /* color of the title */
     border: 2px seagreen;
-    /* background-color: seagreen; */
+    background-color: seagreen;
     padding:10px;
     font-size: 30px;
 }

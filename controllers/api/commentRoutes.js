@@ -37,7 +37,7 @@ router.get('/:postId', async (req, res) => {
         if (comments.length === 0) {
             return res.status(404).json({ message: `No comments found for post with ID ${postId}` });
         }
-         console.log(comments)
+        console.log(comments)
         res.status(200).json(comments);
     } catch (error) {
         console.error('Error fetching comments:', error);
@@ -57,6 +57,7 @@ router.get('/:postId', async (req, res) => {
 //     }
 // });
 
+// one comment instead of two post routes
 router.post('/comments', async(req,res)=>{
     const{comment_text}=req.body;
 

@@ -178,7 +178,7 @@
         bottom:0;
         left:0;
         width:100%;
-        /* background-color: lightblue; */
+        background-color: lightblue;
         color: black;
         padding:20px;
         text-align: center;
@@ -190,7 +190,7 @@
         align-items: center;
         padding: 10px;
         position: absolute; 
-        /* background-color: seagreen; */
+        background-color: seagreen;
         top: 0;
         left: 0;
         width: 100%;

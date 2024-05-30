@@ -53,7 +53,7 @@ function submitComment(postId, commentText) {
             throw new Error('Failed to add comment');
         }
         // Reload the page after adding the comment to reflect the changes
-        location.reload();
+        // location.reload();
     })
     .catch(error => {
         console.error('Error adding comment:', error);
@@ -118,7 +118,7 @@ document.querySelectorAll('.delete-comment').forEach(button => {
 
 // Example function to fetch and render comments for a specific post
 function viewComments(postId) {
-    fetch(`/post/${postId}/comments`)
+    fetch(`/post${postId}comments`)
         .then(response => {
             if (!response.ok) {
                 throw new Error('Failed to retrieve comments');

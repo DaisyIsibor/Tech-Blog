@@ -3,6 +3,21 @@ const { User, Post, Comment } = require('../../models');
 const withAuth = require('../../utils/auth');
 
 // Creating a new post
+// router.post('/', withAuth, async (req, res) => {
+//     try {
+//         const postData = await Post.create({
+//             title: req.body.title,
+//             content: req.body.content,
+//             user_id: req.session.user_id
+//         });
+//         const post = postData.get({ plain: true });
+//         res.status(200).json(post);
+//     } catch (err) {
+//         console.error(err);
+//         res.status(500).json(err);
+//     }
+// });
+
 router.post('/', withAuth, async (req, res) => {
     try {
         const postData = await Post.create({
@@ -10,13 +25,13 @@ router.post('/', withAuth, async (req, res) => {
             content: req.body.content,
             user_id: req.session.user_id
         });
-        const post = postData.get({ plain: true });
-        res.status(200).json(post);
-    } catch (err) {
+        res.status(200).json(postData);
+    }catch(err){
         console.error(err);
         res.status(500).json(err);
     }
-});
+
+    });
 
 //GET all posts with comments
 router.get('/post',async (req,res)=>{
@@ -84,82 +99,73 @@ router.post('/posts/:postId/comment', async (req, res) => {
 
 //Editing a post
 router.put('/:id', withAuth, async (req, res) => {
-    const postId = req.params.id;
     try {
-        // Check if the post exists
-        const post = await Post.findByPk(postId);
-        if (!post) {
-            return res.status(404).json({ message: "Post not found" });
+        const updatedPost = await Post.update({
+            title:req.body.title,
+            content:req.body.content
+        },
+      {      where:{
+        id:req.params.id,user_id: req.session.user_id
+      }
+    }
+);
+        if (!updatedPost[0]){
+            res.status(404).json({message:'No post found with this id'});
+            return;
         }
-
-        // Check if the user is authorized to edit the post
-        if (post.user_id !== req.session.user_id) {
-            return res.status(403).json({ message: "Unauthorized to edit this post" });
-        }
-
-        // Update the post with the new data
-        const [updatedCount] = await Post.update(req.body, {
-            where: { id: postId }
-        });
-
-        // Check if the post was successfully updated
-        if (updatedCount === 0) {
-            return res.status(404).json({ message: "No changes were applied to the post" });
-        }
-
-        // Fetch the updated post data
-        const updatedPost = await Post.findByPk(postId);
-
-        // Respond with success message and updated post data
-        res.status(200).json({ message: "Post updated successfully", post: updatedPost });
-    } catch (error) {
-        console.error("Error updating post:", error);
-        res.status(500).json({ error: "Failed to update post" });
+     res.status(200).json({message:'Post updated successfully'});
+    }catch(err){
+        console.error(err);
+        res.status(500).json(err);
     }
 });
+
+
+
 
 
 // Deleting a post
-// router.delete('/:id', withAuth, async (req, res) => {
-//     try {
-//         const deletedPostCount = await Post.destroy({
-//             where: { id: req.params.id }
-//         });
-//         if (!deletedPostCount) {
-//             res.status(404).json({ message: "No post found with that ID" });
-//             return;
-//         }
-//         res.status(200).json({ message: "Post deleted successfully" });
-//     } catch (err) {
-//         console.error(err);
-//         res.status(500).json(err);
-//     }
-// });
-
 router.delete('/:id', withAuth, async (req, res) => {
-    const postId = req.params.id;
     try {
-        // Check if the post exists
-        const post = await Post.findByPk(postId);
-        if (!post) {
-            return res.status(404).json({ message: "Post not found" });
+        const deletedPost = await Post.destroy({
+            where: { id: req.params.id,user_id: req.session.user_id}
+        });
+
+        if (!deletedPost) {
+            res.status(404).json({ message: "No post found with that Id" });
+            return;
         }
-
-        // Check if the user is authorized to delete the post
-        if (post.user_id !== req.session.user_id) {
-            return res.status(403).json({ message: "Unauthorized to delete this post" });
-        }
-
-        // Delete the post
-        await Post.destroy({ where: { id: postId } });
-
-        // Respond with success message
         res.status(200).json({ message: "Post deleted successfully" });
-    } catch (error) {
-        console.error("Error deleting post:", error);
-        res.status(500).json({ error: "Failed to delete post" });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json(err);
     }
 });
+
+// router.delete('/:id', withAuth, async (req, res) => {
+//     const postId = req.params.id;
+//     try {
+//         // Check if the post exists
+//         const post = await Post.findByPk(postId);
+//         if (!post) {
+//             return res.status(404).json({ message: "Post not found" });
+//         }
+
+//         // Check if the user is authorized to delete the post
+//         if (post.user_id !== req.session.user_id) {
+//             return res.status(403).json({ message: "Unauthorized to delete this post" });
+//         }
+
+//         // Delete the post
+//         await Post.destroy({ where: { id: postId } });
+
+//         // Respond with success message
+//         res.status(200).json({ message: "Post deleted successfully" });
+//     } catch (error) {
+//         console.error("Error deleting post:", error);
+//         res.status(500).json({ error: "Failed to delete post" });
+//     }
+// });
 
 
 module.exports = router;

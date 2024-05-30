@@ -3,12 +3,20 @@
 <div class="single-post">
     <h2>{{ post.title }}</h2>
     <p>{{ post.content }}</p>
-    <p>Posted by: {{ post.username }}</p>
-    <p>Published on: {{ formatDate.date }}</p>
+    <p>Posted by: {{ post.User.username }}</p>
+    <p>Published on: {{ formatDate.post.createdAt}}</p>
 
     <!-- Edit and Delete Buttons -->
+
+    {{#if isAuthor}}
     <div class="post-actions">
-        <button id="edit-post-btn" data-postid="{{ post.id }}">Edit Post</button>
-        <button id="delete-post-btn" data-postid="{{ post.id }}">Delete Post</button>
+        <a ref="'/posts/{{post.id}}/edit" 
+        class="btn">Edit Post</a>
+        <button id="delete-post-btn" data-postid="{{ post.id }}" class="btn">Delete Post</button>
     </div>
+    {{/if}}
 </div>
+
+   {{#if logged_in}}
+    <script src="/public/js/post.js"></script>
+    {{/if}}
