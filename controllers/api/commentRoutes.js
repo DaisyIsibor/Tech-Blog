@@ -5,101 +5,72 @@ const router = express.Router();
 const { Comment } = require('../../models');
 const withAuth = require('../../utils/auth')
 
-// Get all comments
+
+// Fetching all comments
 // router.get('/', async (req, res) => {
 //     try {
 //         const comments = await Comment.findAll();
-//         if (!comments || comments.length === 0) {
-//             return res.status(404).json({ message: 'No comments found' });
-//         }
 //         res.status(200).json(comments);
 //     } catch (err) {
-//         console.error('Error retrieving comments:', err);
-//         res.status(500).json({ error: 'Failed to retrieve comments' });
+//         console.error(err);
+//         res.status(500).json({ error: 'Failed to fetch comments' });
 //     }
 // });
 
-router.get('/comments', async (req, res)=>{
-    try{
-        const comments = await Comment.findAll();
-        res.json(comments);
-    }catch (error) {
-        res.status(500).json({error:'Unable to fetch comment'});
-    }
-});
-
-// Get comments by post ID
-router.get('/:postId', async (req, res) => {
+// Get all comments associated with a post
+router.get('/:postId/comments', async (req, res) => {
     try {
         const postId = req.params.postId;
         const comments = await Comment.findAll({ where: { postId } });
-
-        if (comments.length === 0) {
-            return res.status(404).json({ message: `No comments found for post with ID ${postId}` });
-        }
-        console.log(comments)
         res.status(200).json(comments);
     } catch (error) {
         console.error('Error fetching comments:', error);
-        res.status(500).json({ error: 'Failed to retrieve comments for the post' });
+        res.status(500).json({ error: 'Failed to retrieve comments' });
     }
 });
 
-// Create a new comment
-// router.post('/', withAuth, async (req, res) => {
-//     const { content, postId } = req.body;
-//     try {
-//         const newComment = await Comment.create({ content, postId, userId: req.session.userId });
-//         res.status(201).json({ newComment,success: true  });
-//     } catch (err) {
-//         console.error('Error creating comment:', err);
-//         res.status(500).json({ error: 'Failed to create comment' });
-//     }
-// });
-
-// one comment instead of two post routes
-router.post('/comments', async(req,res)=>{
-    const{comment_text}=req.body;
-
-    try{
-        const newComment =await Comment.create({comment_text});
-        res.json(newComment);
-        console.log({newComment})
-    } catch(error){
-    res.status(500).json({error:'Unable to add comments'});
+// Add a new comment to a post
+router.post('/:postId/comments', async (req, res) => {
+    try {
+        const postId = req.params.postId;
+        const { comment_text } = req.body;
+        const newComment = await Comment.create({ comment_text, postId });
+        res.status(201).json(newComment);
+    } catch (error) {
+        console.error('Error adding comment:', error);
+        res.status(500).json({ error: 'Failed to add comment' });
     }
-})
+});
 
 // Edit a comment by ID
-router.put('/:id', withAuth, async (req, res) => {
-    const commentId = req.params.id;
-    const { content } = req.body;
+router.put('/comments/:commentId', withAuth, async (req, res) => {
     try {
+        const commentId = req.params.commentId;
+        const { comment_text } = req.body;
         const comment = await Comment.findByPk(commentId);
         if (!comment) {
             return res.status(404).json({ message: `Comment with ID ${commentId} not found` });
         }
-        // Update the comment content
-        comment.content = content;
+        comment.comment_text = comment_text;
         await comment.save();
         res.status(200).json({ message: 'Comment updated successfully', comment });
-    } catch (err) {
-        console.error(`Error updating comment with ID ${commentId}:`, err);
+    } catch (error) {
+        console.error(`Error updating comment with ID ${commentId}:`, error);
         res.status(500).json({ error: 'Failed to update comment' });
     }
 });
 
 // Delete a comment by ID
-router.delete('/:id', withAuth, async (req, res) => {
-    const commentId = req.params.id;
+router.delete('/comments/:commentId', withAuth, async (req, res) => {
     try {
+        const commentId = req.params.commentId;
         const deletedComment = await Comment.destroy({ where: { id: commentId } });
         if (!deletedComment) {
             return res.status(404).json({ message: `Comment with ID ${commentId} not found` });
         }
         res.status(200).json({ message: 'Comment deleted successfully' });
-    } catch (err) {
-        console.error(`Error deleting comment with ID ${commentId}:`, err);
+    } catch (error) {
+        console.error(`Error deleting comment with ID ${commentId}:`, error);
         res.status(500).json({ error: 'Failed to delete comment' });
     }
 });

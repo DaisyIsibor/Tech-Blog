@@ -48,22 +48,6 @@ router.get('./posts/:id' , withAuth, async(req,res)=>{
     }
 });
 
-// router.get('/post/:id', withAuth, async (req, res) => {
-//     try {
-//         const postId = req.params.id;
-//         // Retrieve post data with associated comments
-//         const postData = await Post.findOne({
-//             where: { id: postId },
-//             include: [{ model: Comment, include: User }],
-//         });
-//         // Render the single-post view with post and comments
-//         res.render('single-post', { post: postData, loggedIn: req.session.logged_in });
-//     } catch (err) {
-//         console.error(err);
-//         res.status(500).json({ error: 'Internal server error' });
-//     }
-// });
-
 // Redirect to comments page for a specific post
 router.get('/post/:postId/comments', async (req, res) => {
     const postId = req.params.postId;
