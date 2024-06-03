@@ -1,7 +1,7 @@
 <!-- homepage.handlebars -->
 
 {{#each posts}}
-<div class="post">
+    <div class="post" id="post-{{id}}">
     <!-- Make the post title a link to the post details page -->
     <h2><a href="/post/{{id}}/comments">{{title}}</a> - <span class="post-info">{{user.username}} | {{formatDate createdAt}}</span></h2>
     <p>{{content}}</p>
@@ -49,4 +49,24 @@ document.querySelectorAll('.add-comment-form').forEach(function(form) {
         submitComment(postId, commentText);
     });
 });
+</script>
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Function to scroll to the newly created post
+        function scrollToNewPost() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const postId = urlParams.get('postId');
+            if (postId) {
+                const postElement = document.getElementById('post-' + postId);
+                if (postElement) {
+                    postElement.scrollIntoView({ behavior: 'smooth' });
+                }
+            }
+        }
+
+        // Call the function to scroll to the newly created post
+        scrollToNewPost();
+    });
 </script>

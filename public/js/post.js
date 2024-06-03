@@ -1,6 +1,6 @@
 // Function to handle form submission for creating a new post
 document.addEventListener('DOMContentLoaded', () => {
-    // Your JavaScript code here
+    // Function to handle form submission for creating a new post
     const newPostFormHandler = async (event) => {
         event.preventDefault();
 
@@ -18,8 +18,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
 
                 if (response.ok) {
-                    // Redirect to homepage after successful creation
-                    window.location.href = '/';
+                    const responseData = await response.json();
+                    const postId = responseData.id;
+
+                    // Redirect to the homepage with the post ID as a URL parameter
+                    window.location.href = `/?postId=${postId}`;
                 } else {
                     const responseData = await response.json();
                     alert(`Error: ${responseData.error}`);
@@ -31,5 +34,5 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    document.querySelector('#write-form').addEventListener('submit', newPostFormHandler);
+    document.querySelector('#newpost-form').addEventListener('submit', newPostFormHandler);
 });
