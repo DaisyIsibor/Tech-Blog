@@ -3,6 +3,7 @@ const router = require('express').Router();
 const { User, Post, Comment } = require('../../models');
 const withAuth = require('../../utils/auth')
 
+// get all users *
 router.get('/', async (req, res) => {
     try {
     const dbUserData = await User.findAll({
@@ -13,6 +14,8 @@ router.get('/', async (req, res) => {
     res.status(400).json(err);
     }
 });
+
+// The route handler retrieves user data along with associated posts and comments. 
 
 router.get('/:id', async (req, res) => {
     try {
@@ -26,7 +29,7 @@ router.get('/:id', async (req, res) => {
         },
         {
             model: Comment,
-            attributes: ['id', 'text'],
+            attributes: ['id', 'comment_text'],
             include: {
             model: Post,
             attributes: ['title'],
@@ -46,7 +49,7 @@ router.get('/:id', async (req, res) => {
     }
 });
 
-
+// user login *
 router.post('/login', async (req, res) => {
     try {
     const { username, password } = req.body;
@@ -65,6 +68,8 @@ router.post('/login', async (req, res) => {
     res.status(500).json({ message: 'Internal server error' });
     }
 });
+
+// home page after signup *
 router.post('/', async (req, res) => {
     try {
         const dbUserData = await User.create(req.body);
@@ -79,7 +84,7 @@ router.post('/', async (req, res) => {
     }
 });
 
-// this is a signup route to redirect to the profile once user signs up 
+// this is a signup route to redirect to the profile once user signs up *
 router.post('/signup', async (req, res) => {
     try {
         const dbUserData = await User.create(req.body);
@@ -95,6 +100,7 @@ router.post('/signup', async (req, res) => {
 });
 
 
+// user logout *
 router.post('/logout', (req, res) => {
     if (req.session.logged_in) {
     req.session.destroy(() => {

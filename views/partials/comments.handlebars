@@ -1,8 +1,61 @@
 <!-- views/comments.handlebars -->
+{{#if post}}
+<div class="single-post">
+    <h2>{{ post.title }}</h2>
+    <p>{{ post.content }}</p>
+    <p>Posted by: {{ post.User.username }}</p>
+    <p>Published on: {{ formatDate post.createdAt}}</p>
 
-<!-- views/comments.handlebars -->
+    <!-- Edit and Delete Buttons -->
+    {{#if user.id '===' post.User.id}}
+    <div class="post-actions">
+        <a href="/posts/{{post.id}}/edit" class="btn">Edit Post</a>
+        <button id="delete-post-btn" data-postid="{{ post.id }}" class="btn">Delete Post</button>
+    </div>
+    {{/if}}
+</div>
+{{else}}
+    <p>No post found.</p>
+{{/if}}
 
+{{#if comments.length}}
 <div class="comments">
+    <h3>Comments</h3>
+    {{#each comments}}
+    <div class="comment">
+        <p>{{ this.comment_text }}</p>
+        <p>Commented by: {{ this.User.username }}</p>
+        <p>Commented on: {{ formatDate this.createdAt}}</p>
+    </div>
+    {{/each}}
+</div>
+{{else}}
+    <p>No comments yet.</p>
+{{/if}}
+
+<!-- Form to add a new comment -->
+{{!-- <form id="comment-form" class="add-comment-form" method="POST">
+    <input type="hidden" id="post-id" value="{{ postId }}">
+    <textarea id="comment-text" name="comment_text" rows="3" cols="40" placeholder="Add your comment here"></textarea><br>
+    <button type="submit">Submit Comment</button>
+</form> --}}
+
+<!-- Form to add a new comment -->
+<form id="comment-form" class="add-comment-form" method="POST" action="/comments/{{ postId }}/add">
+    <input type="hidden" id="post-id" value="{{ postId }}">
+    <textarea id="comment-text" name="comment_text" rows="3" cols="40" placeholder="Add your comment here"></textarea><br>
+    <button type="submit">Submit Comment</button>
+</form>
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var postId = document.querySelector('#post-id').value;
+        document.querySelector('#comment-form').setAttribute('action', '/comments/' + postId + '/add');
+    });
+</script>
+
+{{!-- <div class="comments">
     <ul>
         {{#each comments as |comment|}}
         <li>
@@ -23,7 +76,7 @@
         <textarea id="comment-text" placeholder="Write your comment here"></textarea>
         <button type="submit">Add Comment</button>
     </form>
-</div>
+</div> --}}
 
 
 <script src="/js/comments.js"></script>

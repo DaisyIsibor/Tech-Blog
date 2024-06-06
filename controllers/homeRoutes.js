@@ -3,7 +3,7 @@ const router = express.Router();
 const { Post, User, Comment } = require('../models');
 const withAuth = require('../utils/auth')
 
-// Retrieve all posts for the homepage
+// Retrieve all posts for the homepage *
 router.get('/', async (req, res) => {
     try {
         // Get all projects and JOIN with user data
@@ -23,7 +23,7 @@ router.get('/', async (req, res) => {
 });
 
 //Render single post view
-
+//** */
 router.get('./posts/:id' , withAuth, async(req,res)=>{
     try{
         const postData =await Post.findByPk(req.params.id,{
@@ -48,11 +48,11 @@ router.get('./posts/:id' , withAuth, async(req,res)=>{
     }
 });
 
-// Redirect to comments page for a specific post
+// Redirect to comments page for a specific post *
 router.get('/post/:postId/comments', async (req, res) => {
     const postId = req.params.postId;
     try {
-        const comments = await Comment.findOne({ where: { postId } });
+        const comments = await Comment.findAll({ where: { postId } });
         console.log({comments})
         res.render('partials/comments', { comments }); 
     } catch (error) {
@@ -63,7 +63,7 @@ router.get('/post/:postId/comments', async (req, res) => {
 
 
 //Render edit post form
-router.get('/posts/:id/edit' , withAuth, async (req,res) => {
+router.get('/edit/:id' , withAuth, async (req,res) => {
     try{
         const postData = await Post.findByPk(req.params.id);
 
@@ -76,7 +76,7 @@ router.get('/posts/:id/edit' , withAuth, async (req,res) => {
             res.status(403).json({message:'You do not have permission to edit this post'});
             return;
         }
-        res.render('editpost', {
+        res.render('editPost', {
             post,logged_in:req.session.logged_in
         });
     } catch(err) {
@@ -85,6 +85,7 @@ router.get('/posts/:id/edit' , withAuth, async (req,res) => {
     }
 })
 
+// profile route *
 router.get('/profile', withAuth, async (req, res) => {
     try {
         // Find the logged-in user based on the session ID
@@ -110,7 +111,7 @@ router.get('/profile', withAuth, async (req, res) => {
 });
 
 
-//Login 
+//Login *
 router.get("/login", (req, res) => {
     if (req.session.logged_in){
         res.redirect('/profile');
@@ -119,6 +120,7 @@ router.get("/login", (req, res) => {
     res.render('login');
 })
 
+// route for the newpost form *
 router.get('/newpost', (req, res) => {
     if (req.session.logged_in) {
         res.render('newpost', {
@@ -128,7 +130,7 @@ router.get('/newpost', (req, res) => {
     }
 })
 
-
+// route for my contact information *
 router.get('/contact', (req, res) => {
     res.render('contact');
 });
