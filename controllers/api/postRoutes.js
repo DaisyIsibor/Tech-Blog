@@ -1,3 +1,5 @@
+//api/commentRoute.js
+
 const router = require('express').Router();
 const { Post, Comment } = require('../../models');
 const withAuth = require('../../utils/auth');
@@ -47,6 +49,7 @@ router.get('/:postId', async (req, res) => {
         res.status(500).json({ error: 'Failed to fetch post' });
     }
 });
+
 
 // Editing a post
 router.put('/:id', withAuth, async (req, res) => {

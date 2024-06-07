@@ -1,81 +1,46 @@
-// commentRoutes.js
+const { Model, DataTypes } = require('sequelize');
+const sequelize = require('../config/connection');
 
-const express = require('express');
-const router = express.Router();
-const { Comment } = require('../../models');
-const withAuth = require('../../utils/auth')
+class Comment extends Model {}
 
-
-// Fetching all comments
-router.get('/comments', async (req, res) => {
-    try {
-        const comments = await Comment.findAll();
-        res.status(200).json(comments);
-    } catch (err) {
-        console.error(err);
-        res.status(500).json({ error: 'Failed to fetch comments' });
-    }
-});
-
-// Get all comments associated with a post
-router.get('/:postId/comments', async (req, res) => {
-    try {
-        const postId = req.params.postId;
-        console.log("Fetching post data for postId:", postId); // Log postId
-        const post = await Post.findByPk(postId); // Fetch post data
-        console.log("Fetched post data:", post); // Log post data
-        const comments = await Comment.findAll({ where: { postId } });
-        res.render('comment', { post, comments }); // Pass post data to view
-    } catch (error) {
-        console.error('Error fetching data:', error);
-        res.status(500).json({ error: 'Internal server error' });
-    }
-});
-
-// Add a new comment to a post
-router.post('/:postId/comments', async (req, res) => {
-    try {
-        const postId = req.params.postId;
-        const { comment_text } = req.body;
-        const newComment = await Comment.create({ comment_text, postId });
-        res.status(201).json(newComment);
-    } catch (error) {
-        console.error('Error adding comment:', error);
-        res.status(500).json({ error: 'Failed to add comment' });
-    }
-});
-
-// Edit a comment by ID
-router.put('/comments/:commentId', withAuth, async (req, res) => {
-    try {
-        const commentId = req.params.commentId;
-        const { comment_text } = req.body;
-        const comment = await Comment.findByPk(commentId);
-        if (!comment) {
-            return res.status(404).json({ message: `Comment with ID ${commentId} not found` });
+Comment.init(
+{
+    id: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        primaryKey: true,
+        autoIncrement: true,
+    },
+    user_id: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+            model: 'user',
+            key: 'id'
         }
-        comment.comment_text = comment_text;
-        await comment.save();
-        res.status(200).json({ message: 'Comment updated successfully', comment });
-    } catch (error) {
-        console.error(`Error updating comment with ID ${commentId}:`, error);
-        res.status(500).json({ error: 'Failed to update comment' });
-    }
-});
-
-// Delete a comment by ID
-router.delete('/comments/:commentId', withAuth, async (req, res) => {
-    try {
-        const commentId = req.params.commentId;
-        const deletedComment = await Comment.destroy({ where: { id: commentId } });
-        if (!deletedComment) {
-            return res.status(404).json({ message: `Comment with ID ${commentId} not found` });
+    },
+    postId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+            model: 'post',
+            key: 'id'
         }
-        res.status(200).json({ message: 'Comment deleted successfully' });
-    } catch (error) {
-        console.error(`Error deleting comment with ID ${commentId}:`, error);
-        res.status(500).json({ error: 'Failed to delete comment' });
-    }
-});
+    },
+    comment_text: {
+        type: DataTypes.TEXT,
+        allowNull: false,
+        validate: {
+            len: [2]
+        },
+    },
+},
+{
+    sequelize,
+    freezeTableName: true,
+    underscored: true,
+    modelName: 'comment',
+}
+);
 
-module.exports = router;
+module.exports = Comment;
