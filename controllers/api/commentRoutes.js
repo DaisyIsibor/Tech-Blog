@@ -7,25 +7,28 @@ const withAuth = require('../../utils/auth')
 
 
 // Fetching all comments
-// router.get('/', async (req, res) => {
-//     try {
-//         const comments = await Comment.findAll();
-//         res.status(200).json(comments);
-//     } catch (err) {
-//         console.error(err);
-//         res.status(500).json({ error: 'Failed to fetch comments' });
-//     }
-// });
+router.get('/comments', async (req, res) => {
+    try {
+        const comments = await Comment.findAll();
+        res.status(200).json(comments);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Failed to fetch comments' });
+    }
+});
 
 // Get all comments associated with a post
 router.get('/:postId/comments', async (req, res) => {
     try {
         const postId = req.params.postId;
+        console.log("Fetching post data for postId:", postId); // Log postId
+        const post = await Post.findByPk(postId); // Fetch post data
+        console.log("Fetched post data:", post); // Log post data
         const comments = await Comment.findAll({ where: { postId } });
-        res.status(200).json(comments);
+        res.render('comment', { post, comments }); // Pass post data to view
     } catch (error) {
-        console.error('Error fetching comments:', error);
-        res.status(500).json({ error: 'Failed to retrieve comments' });
+        console.error('Error fetching data:', error);
+        res.status(500).json({ error: 'Internal server error' });
     }
 });
 
