@@ -1,46 +1,75 @@
-const { Model, DataTypes } = require('sequelize');
-const sequelize = require('../config/connection');
+// commentRoutes.js
+const router = require('express').Router();
+const { Comment } = require('../../models');
+const withAuth = require('../../utils/auth');
 
-class Comment extends Model {}
-
-Comment.init(
-{
-    id: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-        primaryKey: true,
-        autoIncrement: true,
-    },
-    user_id: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-        references: {
-            model: 'user',
-            key: 'id'
-        }
-    },
-    postId: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-        references: {
-            model: 'post',
-            key: 'id'
-        }
-    },
-    comment_text: {
-        type: DataTypes.TEXT,
-        allowNull: false,
-        validate: {
-            len: [2]
-        },
-    },
-},
-{
-    sequelize,
-    freezeTableName: true,
-    underscored: true,
-    modelName: 'comment',
+// Get all comments
+// http://localhost:3001/api/comments
+router.get('/', async (req, res) => {
+try {
+    const comments = await Comment.findAll();
+    res.status(200).json(comments);
+} catch (err) {
+    res.status(500).json({ message: "Failed to fetch comments" });
 }
-);
+});
 
-module.exports = Comment;
+// Get comments by post ID
+//http://localhost:3001/api/comments/1
+router.get('/:postId', async (req, res) => {
+const postId = req.params.postId;
+try {
+    const comments = await Comment.findAll({ where: { postId } });
+    if (!comments.length) {
+    res.status(404).json({ message: `No comments found for post with ID ${postId}` });
+    return;
+    }
+    res.status(200).json(comments);
+} catch (err) {
+    res.status(500).json({ message: "Failed to fetch comments" });
+}
+});
+
+// Create a new comment
+//http://localhost:3001/api/comments
+router.post('/', withAuth, async (req, res) => {
+    const body = req.body;
+    try {
+        const newComment = await Comment.create({
+            ...body,
+            userId: req.session.userId,
+        });
+        res.status(200).json({ newComment, success: true });
+    } catch (err) {
+        res.status(500).json(err);
+    }
+});
+
+// Delete comment route//  http://localhost:3001/api/comments/7
+router.delete('/:id', withAuth, async (req, res) => {
+    try {
+        // Extract the comment ID from the request parameters
+        const commentId = req.params.id;
+
+        // Find the comment by ID and delete it
+        const deletedCommentCount = await Comment.destroy({
+            where: { id: commentId }
+        });
+
+        // Check if any comment was deleted
+        if (deletedCommentCount === 0) {
+            // No comment found with the specified ID
+            return res.status(404).json({
+                message: `No comment found with id = ${commentId}`
+            });
+        }
+
+        // Comment successfully deleted
+        res.status(200).json({ message: "Comment deleted successfully" });
+    } catch (err) {
+        // Handle errors
+        res.status(500).json({ message: "Failed to delete comment", error: err });
+    }
+});
+
+module.exports = router;
