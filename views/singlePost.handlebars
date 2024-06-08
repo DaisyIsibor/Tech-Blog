@@ -1,22 +1,25 @@
 <!-- singlepost.handlebars -->
-
-<div class="single-post">
-    <h2>{{ post.title }}</h2>
+<div class="post">
+    <h2>{{ post.title }}-<span class="post-info">{{ post.User.username }} | {{ formatDate post.createdAt}}</span></h2>
     <p>{{ post.content }}</p>
-    <p>Posted by: {{ post.User.username }}</p>
-    <p>Published on: {{ formatDate.post.createdAt}}</p>
+    
 
+</div>
     <!-- Edit and Delete Buttons -->
 
     {{#if isAuthor}}
     <div class="post-actions">
-        <a ref="'/posts/{{post.id}}/edit" 
+        <a href="/posts/{{post.id}}/edit" 
         class="btn">Edit Post</a>
         <button id="delete-post-btn" data-postid="{{ post.id }}" class="btn">Delete Post</button>
     </div>
     {{/if}}
 </div>
 
-   {{#if logged_in}}
-    <script src="/js/post.js"></script>
-    {{/if}}
+
+
+{{> comments comments=comments postId=post.id logged_in=logged_in }}
+
+{{#if logged_in}}
+<script src="/js/post.js"></script>
+{{/if}}
