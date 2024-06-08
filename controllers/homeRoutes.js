@@ -6,6 +6,7 @@ const { Post, User, Comment } = require('../models');
 const withAuth = require('../utils/auth')
 
 // Retrieve all posts for the homepage *
+//http://localhost:3001/api/posts
 router.get('/', async (req, res) => {
     try {
         // Get all projects and JOIN with user data
@@ -25,43 +26,79 @@ router.get('/', async (req, res) => {
 });
 
 //Render single post view
-//** */
-router.get('./posts/:id' , withAuth, async(req,res)=>{
-    try{
-        const postData =await Post.findByPk(req.params.id,{
-            include:[{
-                model:User,attributes:['username'],
-            },
-        ],
+router.get('/post/:id/comments', withAuth, async (req, res) => {
+    try {
+        const postData = await Post.findByPk(req.params.id, {
+            include: [
+                {
+                    model: User, // Include User model
+                    attributes: ['username'], // Only include the username attribute
+                },
+                {
+                    model: Comment, include: [User],
+                }
+            ],
         });
-        if(!postData) {
-            res.status(404).json({message:'No post found with this id'});
+
+        if (!postData) {
+            res.status(404).json({ message: 'No post found with this id' });
             return;
         }
-        const post =postData.get({plain:true});
-        const isAuthor =post.user_id ===req.session.user_id;
+
+        const post = postData.get({ plain: true });
+        const isAuthor = post.user_id === req.session.user_id;
 
         res.render('singlepost', {
-            post,isAuthor,logged_in: req.session.logged_in
+            post, isAuthor, logged_in: req.session.logged_in
         });
-    }catch (err) {
+    } catch (err) {
         console.error(err);
         res.status(500).json(err);
     }
 });
 
 // Redirect to comments page for a specific post *
+// router.get('/post/:postId/comments', async (req, res) => {
+//     const postId = req.params.postId;
+//     try {
+//         const comments = await Comment.findAll({ where: { postId } });
+//         console.log({comments})
+//         res.render('partials/comments', { comments }); 
+//     } catch (error) {
+//         console.error('Error fetching comments:', error);
+//         res.status(500).json({ error: 'Internal server error' });
+//     }
+// })
+
 router.get('/post/:postId/comments', async (req, res) => {
     const postId = req.params.postId;
     try {
-        const comments = await Comment.findAll({ where: { postId } });
-        console.log({comments})
-        res.render('partials/comments', { comments }); 
+        const postData = await Post.findByPk(postId, {
+            include: [
+                {
+                    model: Comment,
+                    include: [User] // Including User to get username
+                }
+            ]
+        });
+
+        if (!postData) {
+            res.status(404).json({ message: 'No post found with this id' });
+            return;
+        }
+
+        const post = postData.get({ plain: true });
+
+        res.render('singlepost', { 
+            post, 
+            comments: post.Comments, 
+            logged_in: req.session.logged_in 
+        });
     } catch (error) {
         console.error('Error fetching comments:', error);
         res.status(500).json({ error: 'Internal server error' });
     }
-})
+});
 
 
 //Render edit post form
