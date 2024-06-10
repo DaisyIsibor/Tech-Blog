@@ -14,15 +14,7 @@
 
 ## Description
 
-Welcome to our Tech-Blog, the perfect platform for tech enthusiasts and developers to share their insights and expertise with the world. Our CMS-style blog site offers a seamless experience for publishing articles, blog posts, and opinions on all things tech.
-
-When you first visit the site, you'll find a user-friendly homepage with existing blog posts, navigation links, and an option to log in. Navigate to the homepage or dashboard with ease, where you can explore, create, and manage your content effortlessly.
-
-Signing up is quick and easy, requiring only a username and password. Once registered, you'll have access to features like publishing articles, leaving comments, and managing your posts. Our intuitive interface ensures a smooth experience from start to finish.
-
-Security is a top priority, with measures in place to protect your data and privacy. Engage with fellow users through comments and discussions, fostering a vibrant community of tech enthusiasts.
-
-Whether you're a seasoned writer or new to the scene, our Tech-Blog provides the tools you need to share your passion for technology with the world. Join us today and start sharing your ideas and insights!
+Tech-Blog is an intuitive CMS-style platform designed for tech enthusiasts and developers to share their insights and expertise. It allows users to publish articles, blog posts, and opinions on various tech topics with ease. The site features a user-friendly interface, secure login system using bcrypt for password masking, and robust commenting functionality, fostering a vibrant community of tech writers and readers.
 
 ## Installation
 
@@ -88,10 +80,20 @@ THEN I am able to view posts and comments but I am prompted to log in again befo
  links used for my tech blog 
 
 https://www.freecodecamp.org/news/how-to-build-sign-up-form-with-html-and-css/
+https://github.com/fuuko08/MVC-Tech-Blog
 
 
 ## Usage
-Once the application is installed and running, you can access it through your web browser. Users can view blog posts, comment on posts, and interact with other users.
+Once the application is installed and running, you can access it through your web browser. Users can:
+
+View blog posts on the homepage.
+
+Sign up for an account or log in with existing credentials.
+
+Create new blog posts, edit, or delete their existing posts from the dashboard.
+
+Comment on posts to engage with other users.
+
 
 ## Tests
 To run tests for the Tech-Blog application, execute the following command:
