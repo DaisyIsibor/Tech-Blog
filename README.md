@@ -13,6 +13,7 @@
 - [License](#license)
 
 ## Description
+
 Welcome to our Tech-Blog, the perfect platform for tech enthusiasts and developers to share their insights and expertise with the world. Our CMS-style blog site offers a seamless experience for publishing articles, blog posts, and opinions on all things tech.
 
 When you first visit the site, you'll find a user-friendly homepage with existing blog posts, navigation links, and an option to log in. Navigate to the homepage or dashboard with ease, where you can explore, create, and manage your content effortlessly.
@@ -24,6 +25,7 @@ Security is a top priority, with measures in place to protect your data and priv
 Whether you're a seasoned writer or new to the scene, our Tech-Blog provides the tools you need to share your passion for technology with the world. Join us today and start sharing your ideas and insights!
 
 ## Installation
+
 To install and run the Tech-Blog application, follow these steps:
 
 Clone the repository from GitHub: git clone https://github.com/your-repo.git
@@ -95,7 +97,7 @@ Once the application is installed and running, you can access it through your we
 To run tests for the Tech-Blog application, execute the following command:
 
 
-npm test
+npm start
 
 ## Questions
 

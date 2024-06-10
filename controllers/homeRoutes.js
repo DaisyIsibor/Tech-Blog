@@ -25,7 +25,7 @@ router.get('/', async (req, res) => {
     }
 });
 
-//Render single post view
+//Render single post view  *
 router.get('/post/:id/comments', withAuth, async (req, res) => {
     try {
         const postData = await Post.findByPk(req.params.id, {
@@ -58,6 +58,7 @@ router.get('/post/:id/comments', withAuth, async (req, res) => {
 });
 
 
+// rendering the single post page with comment 
 router.get('/post/:postId/comments', async (req, res) => {
     const postId = req.params.postId;
     try {

@@ -75,10 +75,23 @@ router.put('/:id', withAuth, async (req, res) => {
 
 
 
-// Deleting a post
+// Deleting a post *
 router.delete('/:postId', withAuth, async (req, res) => {
     try {
         const postId = req.params.postId;
+
+        // Find the post by its ID
+        const post = await Post.findByPk(postId);
+
+        // Check if the post exists
+        if (!post) {
+            return res.status(404).json({ message: 'No post found with this id' });
+        }
+
+        // Check if the authenticated user is the owner of the post
+        if (post.user_id !== req.session.user_id) {
+            return res.status(403).json({ message: 'You do not have permission to delete this post' });
+        }
 
         // Delete comments associated with the post
         await Comment.destroy({
@@ -86,27 +99,16 @@ router.delete('/:postId', withAuth, async (req, res) => {
         });
 
         // Delete the post itself
-        const deletedPostCount = await Post.destroy({
-            where: {
-                id: postId,
-                user_id: req.session.user_id 
-            },
-        });
+        await post.destroy();
 
-        // Check if the post was deleted successfully
-        if (!deletedPostCount) {
-            res.status(404).json({
-                message: `Post not found or you don't have permission to delete it`,
-            });
-            return;
-        }
-  
+        // Send a success response
         res.status(200).json({ message: 'Post deleted successfully' });
     } catch (err) {
         console.error(err);
         res.status(500).json({ message: 'Failed to delete post' });
     }
 });
+
 
 module.exports = router;
 

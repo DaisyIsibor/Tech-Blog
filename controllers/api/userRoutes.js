@@ -15,7 +15,7 @@ router.get('/', async (req, res) => {
     }
 });
 
-// The route handler retrieves user data along with associated posts and comments. 
+// The route handler retrieves user data along with associated posts and comments. *
 
 router.get('/:id', async (req, res) => {
     try {

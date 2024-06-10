@@ -3,7 +3,7 @@ const router = require('express').Router();
 const { Comment } = require('../../models');
 const withAuth = require('../../utils/auth');
 
-// Get all comments
+// Get all comments* backend
 // http://localhost:3001/api/comments
 router.get('/', async (req, res) => {
 try {
@@ -14,7 +14,7 @@ try {
 }
 });
 
-// Get comments by post ID
+// Get comments by post ID *postman
 //http://localhost:3001/api/comments/1
 router.get('/:postId', async (req, res) => {
 const postId = req.params.postId;
@@ -30,7 +30,7 @@ try {
 }
 });
 
-// Create a new comment
+// Create a new comment* postman
 //http://localhost:3001/api/comments
 router.post('/', withAuth, async (req, res) => {
     const body = req.body;
@@ -45,7 +45,7 @@ router.post('/', withAuth, async (req, res) => {
     }
 });
 
-// Delete comment route//  http://localhost:3001/api/comments/7
+// Delete comment route//  http://localhost:3001/api/comments/7  * postman
 router.delete('/:id', withAuth, async (req, res) => {
     try {
         // Extract the comment ID from the request parameters

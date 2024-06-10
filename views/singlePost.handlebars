@@ -10,7 +10,7 @@
     {{#if isAuthor}}
     <div class="post-actions">
         <a href="/posts/{{post.id}}/edit" 
-        class="btn">Edit Post</a>
+        class="btn edit-post-btn">Edit Post</a>
     <button class="delete-post-btn" data-post-id="{{ post.id }}">Delete Post</button>
     </div>
     {{/if}}
@@ -22,35 +22,36 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // Function to handle post deletion
-    function handleDeletePost(event) {
+    // Find the delete button
+    const deleteButton = document.querySelector('.delete-post-btn');
+
+    // Define the delete handler function
+    function deleteHandler(event) {
         event.preventDefault();
         const postId = event.target.dataset.postId;
-        
-        // Send a DELETE request to the backend to delete the post
         fetch(`/api/posts/${postId}`, {
             method: 'DELETE'
         })
         .then(function(response) {
             if (response.ok) {
-                // Reload the page to reflect the deletion
-                location.reload();
+                // Redirect to the home page
+                window.location.href = '/';
             } else {
                 console.error('Failed to delete post:', response.statusText);
             }
         })
         .catch(function(error) {
-            console.error('Error deleting post:', error.message);
+            console.error('Error deleting post:', error);
         });
     }
 
-    // Add event listener to the delete post buttons
-    const deletePostButtons = document.querySelectorAll('.delete-post-btn');
-    for (let i = 0; i < deletePostButtons.length; i++) {
-        deletePostButtons[i].addEventListener('click', handleDeletePost);
+    // Add event listener to the delete button
+    if (deleteButton) {
+        deleteButton.addEventListener('click', deleteHandler);
     }
 });
 </script>
+
 
 {{#if logged_in}}
 <script src="/js/post.js"></script>

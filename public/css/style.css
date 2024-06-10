@@ -190,11 +190,12 @@
         align-items: center;
         padding: 10px;
         position: absolute; 
-        /* background-color: seagreen; */
+        background-color: seagreen;
         top: 0;
         left: 0;
         width: 100%;
         z-index: 1000;
+        
         
     }
 
@@ -208,6 +209,7 @@
     .header-left {
         display: flex;
         align-items: center;
+        
     
     }
 
