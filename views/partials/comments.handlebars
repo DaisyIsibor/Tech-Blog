@@ -1,22 +1,4 @@
 <!-- views/comments.handlebars -->
-{{#if post}}
-<div class="single-post">
-    <h2>{{ post.title }}</h2>
-    <p>{{ post.content }}</p>
-    <p>Posted by: {{ post.User.username }}</p>
-    <p>Published on: {{ formatDate post.createdAt}}</p>
-
-    <!-- Edit and Delete Buttons -->
-    {{#if user.id '===' post.User.id}}
-    <div class="post-actions">
-        <a href="/posts/{{post.id}}/edit" class="btn">Edit Post</a>
-        <button id="delete-post-btn" data-postid="{{ post.id }}" class="btn">Delete Post</button>
-    </div>
-    {{/if}}
-</div>
-{{else}}
-    <p>No post found.</p>
-{{/if}}
 
 {{#if comments.length}}
 <div class="comments">
@@ -34,14 +16,7 @@
 {{/if}}
 
 <!-- Form to add a new comment -->
-{{!-- <form id="comment-form" class="add-comment-form" method="POST">
-    <input type="hidden" id="post-id" value="{{ postId }}">
-    <textarea id="comment-text" name="comment_text" rows="3" cols="40" placeholder="Add your comment here"></textarea><br>
-    <button type="submit">Submit Comment</button>
-</form> --}}
-
-<!-- Form to add a new comment -->
-<form id="comment-form" class="add-comment-form" method="POST" action="/comments/{{ postId }}/add">
+<form id="comment-form" class="add-comment-form" method="POST">
     <input type="hidden" id="post-id" value="{{ postId }}">
     <textarea id="comment-text" name="comment_text" rows="3" cols="40" placeholder="Add your comment here"></textarea><br>
     <button type="submit">Submit Comment</button>
@@ -51,32 +26,10 @@
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         var postId = document.querySelector('#post-id').value;
-        document.querySelector('#comment-form').setAttribute('action', '/comments/' + postId + '/add');
+        document.querySelector('#comment-form').setAttribute('action', '/api/comments');
     });
 </script>
 
-{{!-- <div class="comments">
-    <ul>
-        {{#each comments as |comment|}}
-        <li>
-            {{comment.comment_text}}
-            <p>Posted on: {{formatDate comment.createdAt}}</p>
-
-            <!-- Option to edit/delete comment if user owns it -->
-            {{#if userOwnsComment}}
-            <button class="delete-comment" data-commentId="{{comment.id}}">Delete</button>
-            {{/if}}
-        </li>
-        {{/each}}
-    </ul>
-
-    <!-- Form to add a new comment -->
-    <form id="comment-form">
-        <input type="hidden" id="post-id" value="{{ postId }}">
-        <textarea id="comment-text" placeholder="Write your comment here"></textarea>
-        <button type="submit">Add Comment</button>
-    </form>
-</div> --}}
 
 
 <script src="/js/comments.js"></script>
