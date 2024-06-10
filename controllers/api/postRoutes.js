@@ -54,20 +54,57 @@ router.get('/:postId', async (req, res) => {
 // Editing a post
 router.put('/:id', withAuth, async (req, res) => {
     try {
-        // Update the post
+        const postData = await Post.update(req.body, {
+            where: {
+                id: req.params.id,
+                user_id: req.session.user_id // Ensure that only the owner of the post can update it
+            }
+        });
+
+        if (!postData[0]) {
+            res.status(404).json({ message: 'No post found with this id or you do not have permission to edit this post' });
+            return;
+        }
+
+        res.status(200).json({ message: 'Post updated successfully' });
     } catch (err) {
-        console.error('Error updating post:', err);
-        res.status(500).json({ error: 'Failed to update post' });
+        console.error(err);
+        res.status(500).json({ message: 'Failed to update post' });
     }
 });
 
+
+
 // Deleting a post
-router.delete('/:id', withAuth, async (req, res) => {
+router.delete('/:postId', withAuth, async (req, res) => {
     try {
-        // Delete the post
+        const postId = req.params.postId;
+
+        // Delete comments associated with the post
+        await Comment.destroy({
+            where: { postId: postId },
+        });
+
+        // Delete the post itself
+        const deletedPostCount = await Post.destroy({
+            where: {
+                id: postId,
+                user_id: req.session.user_id 
+            },
+        });
+
+        // Check if the post was deleted successfully
+        if (!deletedPostCount) {
+            res.status(404).json({
+                message: `Post not found or you don't have permission to delete it`,
+            });
+            return;
+        }
+  
+        res.status(200).json({ message: 'Post deleted successfully' });
     } catch (err) {
-        console.error('Error deleting post:', err);
-        res.status(500).json({ error: 'Failed to delete post' });
+        console.error(err);
+        res.status(500).json({ message: 'Failed to delete post' });
     }
 });
 

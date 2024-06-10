@@ -90,27 +90,33 @@ router.get('/post/:postId/comments', async (req, res) => {
 
 
 //Render edit post form
-router.get('/edit/:id' , withAuth, async (req,res) => {
-    try{
+router.get('/posts/edit/:id', withAuth, async (req, res) => {
+    try {
         const postData = await Post.findByPk(req.params.id);
 
-        if(!postData) {
-            res.status(404).json({message:'No post found with this id'});
+        if (!postData) {
+            res.status(404).json({ message: 'No post found with this id' });
             return;
         }
-        const post = postData.get({plain:true});
-        if(post.user_id !== req.session.user_id){
-            res.status(403).json({message:'You do not have permission to edit this post'});
+
+        const post = postData.get({ plain: true });
+
+        // Check if the authenticated user is the owner of the post
+        if (post.user_id !== req.session.user_id) {
+            res.status(403).json({ message: 'You do not have permission to edit this post' });
             return;
         }
+
+        // Render the edit post form with the post data
         res.render('editPost', {
-            post,logged_in:req.session.logged_in
+            post,
+            logged_in: req.session.logged_in
         });
-    } catch(err) {
+    } catch (err) {
         console.error(err);
-        res.status(500).json(err);
+        res.status(500).json({ message: 'Failed to fetch post data' });
     }
-})
+});
 
 // profile route *
 router.get('/profile', withAuth, async (req, res) => {
