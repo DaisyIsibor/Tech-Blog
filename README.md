@@ -97,9 +97,15 @@ Comment on posts to engage with other users.
 
 ## Tests
 To run tests for the Tech-Blog application, execute the following command:
-
-
 npm start
+
+![alt text](public/images/homepage.png)
+![alt text](public/images/post-commentform.png)
+![alt text](<public/images/profile page.png>)
+![alt text](public/images/new-post-page.png)
+![alt text](public/images/singlepost.png)
+
+
 
 ## Questions
 
