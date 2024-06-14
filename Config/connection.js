@@ -23,4 +23,13 @@ if (process.env.JAWSDB_URL) {
   );
 }
 
+// Test the database connection and log any errors
+sequelize.authenticate()
+  .then(() => {
+    console.log('Connection to the database has been established successfully.');
+  })
+  .catch(err => {
+    console.error('Unable to connect to the database:', err);
+  });
+
 module.exports = sequelize;
