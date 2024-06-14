@@ -2,7 +2,7 @@
 const router = require('express').Router();
 const { Comment } = require('../../models');
 const withAuth = require('../../utils/auth');
-const sequelize = require('../../config/connection');
+// const sequelize = require('../../config/connection');
 
 // Get all comments* backend
 // http://localhost:3001/api/comments
