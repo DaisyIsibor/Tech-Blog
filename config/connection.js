@@ -3,8 +3,7 @@
 const Sequelize = require('sequelize');
 require('dotenv').config();
 
-let sequelize;
-// Check if JAWSDB_URL environment variable is set (indicating JawsDB MySQL service on Heroku)
+
 if (process.env.JAWSDB_URL) {
 
     // Initialize Sequelize with JawsDB URL
