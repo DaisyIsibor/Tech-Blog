@@ -94,6 +94,11 @@ Create new blog posts, edit, or delete their existing posts from the dashboard.
 
 Comment on posts to engage with other users.
 
+http://localhost:3001/api/comments/7 
+http://localhost:3001/api/comments
+http://localhost:3001/api/comments/1
+http://localhost:3001/api/comments
+
 
 ## Tests
 To run tests for the Tech-Blog application, execute the following command:

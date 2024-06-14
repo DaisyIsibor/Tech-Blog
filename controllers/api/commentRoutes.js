@@ -5,7 +5,7 @@ const withAuth = require('../../utils/auth');
 // const sequelize = require('../../config/connection');
 
 // Get all comments* backend
-// http://localhost:3001/api/comments
+
 router.get('/', async (req, res) => {
 try {
     const comments = await Comment.findAll();
@@ -16,7 +16,7 @@ try {
 });
 
 // Get comments by post ID *postman
-//http://localhost:3001/api/comments/1
+
 router.get('/:postId', async (req, res) => {
 const postId = req.params.postId;
 try {
@@ -32,7 +32,7 @@ try {
 });
 
 // Create a new comment* postman
-//http://localhost:3001/api/comments
+
 router.post('/', withAuth, async (req, res) => {
     const body = req.body;
     try {
@@ -46,7 +46,7 @@ router.post('/', withAuth, async (req, res) => {
     }
 });
 
-// Delete comment route//  http://localhost:3001/api/comments/7  * postman
+// Delete comment route//  * postman
 router.delete('/:id', withAuth, async (req, res) => {
     try {
         // Extract the comment ID from the request parameters
