@@ -1,5 +1,5 @@
 // All connections to the PORT 3001 and all requires
-// require('dotenv').config();
+require('dotenv').config(); // Load environment variables from .env file
 const path = require('path');
 const express = require('express');
 const session = require('express-session');
